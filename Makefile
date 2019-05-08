@@ -13,6 +13,9 @@ start2:
 start3:
 	npx babel-node src/bin/gendiff.js before.yml after.yml
 
+start4:
+	npx babel-node src/bin/gendiff.js before.ini after.ini
+
 publish:
 	npm publish
 
