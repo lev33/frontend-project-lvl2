@@ -10,6 +10,9 @@ start1:
 start2:
 	npx babel-node src/bin/gendiff.js before.json after.json
 
+start3:
+	npx babel-node src/bin/gendiff.js before.yml after.yml
+
 publish:
 	npm publish
 
