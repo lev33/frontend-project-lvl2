@@ -1,10 +1,10 @@
 {
   "name": "gendiff-s475",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "gendiff project",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
     "prepublishOnly": "npm run build"
   },
@@ -27,11 +27,17 @@
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.4",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.8.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.2"
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "^22.5.1",
+    "jest": "^24.8.0",
+    "jest-cli": "^24.8.0"
   },
   "dependencies": {
-    "commander": "^2.20.0"
+    "commander": "^2.20.0",
+    "lodash": "^4.17.11"
   }
 }
