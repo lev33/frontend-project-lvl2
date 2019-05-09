@@ -7,7 +7,9 @@ export default (pathToFile1, pathToFile2) => {
   const content2 = fs.readFileSync(pathToFile2, 'utf8');
   const extname = path.extname(pathToFile1);
   const j1 = parse(content1, extname);
+  console.log(j1);
   const j2 = parse(content2, extname);
+  console.log(j2);
   const keys1 = Object.keys(j1);
   const keys2 = Object.keys(j2);
   const k1 = keys1.filter(n => !keys2.includes(n));
