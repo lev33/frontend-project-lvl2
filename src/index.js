@@ -103,9 +103,11 @@ export default (pathToFile1, pathToFile2, format = '') => {
   const j1 = parse(content1, extname);
   const j2 = parse(content2, extname);
   const ast = getAst(j1, j2);
-
   if (format.format === 'plain') {
     return readPlane(ast);
+  }
+  if (format.format === 'json') {
+    return JSON.stringify(ast);
   }
   return `{\n${readAst(ast)}}`;
 };
