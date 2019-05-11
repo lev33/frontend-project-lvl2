@@ -36,6 +36,32 @@ const getAst = (obj1, obj2) => {
   };
 };
 
+const readPlane = (tree, prefix = '') => {
+  const readValue = (a) => {
+    if (!(a instanceof Object)) {
+      return a;
+    }
+    return '[complex value]';
+  };
+
+  const t = Object.values(tree);
+  const keysRemoved = t[0];
+  const keysAdded = t[1];
+  const keysUnchanged = t[2];
+  const keysChanged = t[3];
+  const keysOfObjects = t[4];
+  const a = Object.keys(keysRemoved).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was removed\n`), '');
+  const b = Object.keys(keysAdded).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was added with value: ${readValue(keysAdded[key])}\n`), a);
+  const c = Object.keys(keysUnchanged).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was unchanged with value: ${readValue(keysUnchanged[key])}\n`), b);
+  const d = Object.keys(keysChanged).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was updated. From ${readValue(keysChanged[key].old)} to ${readValue(keysChanged[key].new)}\n`), c);
+
+  if (keysOfObjects === []) {
+    return d;
+  }
+  const ch = Object.keys(keysOfObjects).reduce((acc, key) => acc.concat(`${readPlane(keysOfObjects[key], (prefix === '') ? `${key}.` : `${prefix}${key}.`)}`), '');
+  return d + ch;
+};
+
 const readAst = (tree, tab = 1) => {
   const t = Object.values(tree);
   const keysRemoved = t[0];
@@ -69,15 +95,17 @@ const readAst = (tree, tab = 1) => {
 //  return `{\n${c}}`;
 };
 
-export default (pathToFile1, pathToFile2) => {
+export default (pathToFile1, pathToFile2, format = '') => {
+//  console.log('FORMAT', format);
   const content1 = fs.readFileSync(pathToFile1, 'utf8');
   const content2 = fs.readFileSync(pathToFile2, 'utf8');
   const extname = path.extname(pathToFile1);
   const j1 = parse(content1, extname);
   const j2 = parse(content2, extname);
   const ast = getAst(j1, j2);
-  //  console.log('AST', ast);
-  const out = readAst(ast);
-  //  console.log('READ AST', out);
-  return `{\n${out}}`;
+
+  if (format.format === 'plain') {
+    return readPlane(ast);
+  }
+  return `{\n${readAst(ast)}}`;
 };
