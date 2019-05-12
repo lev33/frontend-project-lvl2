@@ -5,32 +5,30 @@ import parse from './parsers';
 const getAst = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
+
   const keysRemoved = keys1.filter(n => !keys2.includes(n));
   const keysAdded = keys2.filter(n => !keys1.includes(n));
   const keysDoubled = keys1.filter(n => keys2.includes(n));
-  let keysUnchanged = [];
-  let keysChanged = [];
-  let keysOfObjects = [];
-  if (keysDoubled) {
-    const f = (a, b) => (a instanceof Object) && (b instanceof Object);
-    keysUnchanged = keysDoubled.filter(n => !f(obj1[n], obj2[n]) && (obj1[n] === obj2[n]));
-    keysChanged = keysDoubled.filter(n => !f(obj1[n], obj2[n]) && (obj1[n] !== obj2[n]));
-    keysOfObjects = keysDoubled.filter(n => f(obj1[n], obj2[n]));
-  }
-  //  console.log('KEYS:', keysRemoved, keysAdded, keysUnchanged, keysChanged, keysOfObjects);
+
+  const f = (a, b) => (a instanceof Object) && (b instanceof Object);
+  const keysUnchanged = keysDoubled
+    ? keysDoubled.filter(n => !f(obj1[n], obj2[n]) && (obj1[n] === obj2[n])) : [];
+  const keysChanged = keysDoubled
+    ? keysDoubled.filter(n => !f(obj1[n], obj2[n]) && (obj1[n] !== obj2[n])) : [];
+  const keysOfObjects = keysDoubled ? keysDoubled.filter(n => f(obj1[n], obj2[n])) : [];
+
   const kr = keysRemoved.reduce((acc, key) => ({ ...acc, [key]: obj1[key] }), {});
   const ka = keysAdded.reduce((acc, key) => ({ ...acc, [key]: obj2[key] }), {});
   const ku = keysUnchanged.reduce((acc, key) => ({ ...acc, [key]: obj1[key] }), {});
   const kc = keysChanged.reduce((acc, key) => (
     { ...acc, [key]: { old: obj1[key], new: obj2[key] } }), {});
-  // console.log('KEYS1:', kr, ka, ku, kc);
+
   if (keysOfObjects === []) {
     return {
       removed: kr, added: ka, unchanged: ku, changed: kc, children: {},
     };
   }
   const ch = keysOfObjects.reduce((acc, n) => ({ ...acc, [n]: getAst(obj1[n], obj2[n]) }), {});
-  // console.log('CH', ch);
   return {
     removed: kr, added: ka, unchanged: ku, changed: kc, children: ch,
   };
@@ -90,13 +88,10 @@ const readAst = (tree, tab = 1) => {
     return d;
   }
   const ch = Object.keys(keysOfObjects).reduce((acc, key) => acc.concat(`${space(tab)}${key}: {\n${readAst(keysOfObjects[key], tab + 2)}\n${space(tab)}}\n`), '');
-  //  console.log('TREE', t);
   return d + ch;
-//  return `{\n${c}}`;
 };
 
 export default (pathToFile1, pathToFile2, format = '') => {
-//  console.log('FORMAT', format);
   const content1 = fs.readFileSync(pathToFile1, 'utf8');
   const content2 = fs.readFileSync(pathToFile2, 'utf8');
   const extname = path.extname(pathToFile1);
