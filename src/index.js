@@ -48,10 +48,10 @@ const readPlane = (tree, prefix = '') => {
   const keysUnchanged = t[2];
   const keysChanged = t[3];
   const keysOfObjects = t[4];
-  const a = Object.keys(keysRemoved).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was removed\n`), '');
-  const b = Object.keys(keysAdded).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was added with value: ${readValue(keysAdded[key])}\n`), a);
-  const c = Object.keys(keysUnchanged).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was unchanged with value: ${readValue(keysUnchanged[key])}\n`), b);
-  const d = Object.keys(keysChanged).reduce((acc, key) => acc.concat(`Property ${prefix}${key} was updated. From ${readValue(keysChanged[key].old)} to ${readValue(keysChanged[key].new)}\n`), c);
+  const a = Object.keys(keysRemoved).reduce((acc, key) => acc.concat(`\nProperty '${prefix}${key}' was removed`), '');
+  const b = Object.keys(keysAdded).reduce((acc, key) => acc.concat(`\nProperty '${prefix}${key}' was added with value: ${readValue(keysAdded[key])}`), a);
+  const c = Object.keys(keysUnchanged).reduce((acc, key) => acc.concat(`\nProperty '${prefix}${key}' was unchanged with value: ${readValue(keysUnchanged[key])}`), b);
+  const d = Object.keys(keysChanged).reduce((acc, key) => acc.concat(`\nProperty '${prefix}${key}' was updated. From ${readValue(keysChanged[key].old)} to ${readValue(keysChanged[key].new)}`), c);
 
   if (keysOfObjects === []) {
     return d;
@@ -79,15 +79,15 @@ const readAst = (tree, tab = 1) => {
     return `{\n${openingSpaces}${Object.keys(a)}: ${Object.values(a)}\n${closingSpaces}}`;
   };
 
-  const a = Object.keys(keysRemoved).reduce((acc, key) => acc.concat(`${space(tab)}- ${key}: ${readValue(keysRemoved[key], tab)}\n`), '');
-  const b = Object.keys(keysAdded).reduce((acc, key) => acc.concat(`${space(tab)}+ ${key}: ${readValue(keysAdded[key], tab)}\n`), a);
-  const c = Object.keys(keysUnchanged).reduce((acc, key) => acc.concat(`${space(tab)}  ${key}: ${readValue(keysUnchanged[key], tab)}\n`), b);
-  const d = Object.keys(keysChanged).reduce((acc, key) => acc.concat(`${space(tab)}- ${key}: ${readValue(keysChanged[key].old, tab)}\n${space(tab)}+ ${key}: ${readValue(keysChanged[key].new, tab)}\n`), c);
+  const a = Object.keys(keysRemoved).reduce((acc, key) => acc.concat(`\n${space(tab)}- ${key}: ${readValue(keysRemoved[key], tab)}`), '');
+  const b = Object.keys(keysAdded).reduce((acc, key) => acc.concat(`\n${space(tab)}+ ${key}: ${readValue(keysAdded[key], tab)}`), a);
+  const c = Object.keys(keysUnchanged).reduce((acc, key) => acc.concat(`\n${space(tab)}  ${key}: ${readValue(keysUnchanged[key], tab)}`), b);
+  const d = Object.keys(keysChanged).reduce((acc, key) => acc.concat(`\n${space(tab)}- ${key}: ${readValue(keysChanged[key].old, tab)}\n${space(tab)}+ ${key}: ${readValue(keysChanged[key].new, tab)}`), c);
 
   if (keysOfObjects === []) {
     return d;
   }
-  const ch = Object.keys(keysOfObjects).reduce((acc, key) => acc.concat(`${space(tab)}${key}: {\n${readAst(keysOfObjects[key], tab + 2)}\n${space(tab)}}\n`), '');
+  const ch = Object.keys(keysOfObjects).reduce((acc, key) => acc.concat(`\n${space(tab)}  ${key}: {${readAst(keysOfObjects[key], tab + 2)}\n${space(tab)}}`), '');
   return d + ch;
 };
 
@@ -98,11 +98,11 @@ export default (pathToFile1, pathToFile2, format = '') => {
   const j1 = parse(content1, extname);
   const j2 = parse(content2, extname);
   const ast = getAst(j1, j2);
-  if (format.format === 'plain') {
+  if (format === 'plain') {
     return readPlane(ast);
   }
-  if (format.format === 'json') {
+  if (format === 'json') {
     return JSON.stringify(ast);
   }
-  return `{\n${readAst(ast)}}`;
+  return `{${readAst(ast)}\n}`;
 };

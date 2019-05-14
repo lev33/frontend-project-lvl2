@@ -7,10 +7,8 @@ program
   .description('Compares two configuration files and shows a difference.')
   .version('0.0.1')
   .option('-f, --format [type]', 'Output format')
-  .action((firstConfig, secondConfig, format) => {
+  .action((firstConfig, secondConfig, { format }) => {
     console.log(genDiff(firstConfig, secondConfig, format));
   });
-
-program.on('--help', () => {});
 
 program.parse(process.argv);

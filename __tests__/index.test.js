@@ -1,22 +1,54 @@
-// import path from 'path';
-// import fs from 'fs';
+import path from 'path';
+import fs from 'fs';
 import genDiff from '../src';
 
-// const result = fs.readFileSync('__tests__/__fixtures__/result', 'utf8');
+const getFixturePath = fileName => path.join(__dirname, '__fixtures__', fileName);
 
-// console.log(result);
-
-test('555', () => {
-  expect(genDiff('__tests__/__fixtures__/before.json', '__tests__/__fixtures__/after.json')).toBe('{\n  - proxy: 123.234.53.22\n  - follow: false\n  + verbose: true\n    host: hexlet.io\n  - timeout: 50\n  + timeout: 20\n}');
-});
+const result = fs.readFileSync(getFixturePath('result'), 'utf8').trim();
+const resultTree = fs.readFileSync(getFixturePath('resultTree'), 'utf8').trim();
+const resultPlain = fs.readFileSync(getFixturePath('resultPlain'), 'utf8').trimEnd();
+const resultJson = fs.readFileSync(getFixturePath('resultJson'), 'utf8').trim();
 
 test.each([
-  ['__tests__/__fixtures__/before.json', '__tests__/__fixtures__/after.json', '{\n  - proxy: 123.234.53.22\n  - follow: false\n  + verbose: true\n    host: hexlet.io\n  - timeout: 50\n  + timeout: 20\n}'],
-  ['__tests__/__fixtures__/before.yml', '__tests__/__fixtures__/after.yml', '{\n  - proxy: 123.234.53.22\n  - follow: false\n  + verbose: true\n    host: hexlet.io\n  - timeout: 50\n  + timeout: 20\n}'],
-  ['__tests__/__fixtures__/before.ini', '__tests__/__fixtures__/after.ini', '{\n  - proxy: 123.234.53.22\n  - follow: false\n  + verbose: true\n    host: hexlet.io\n  - timeout: 50\n  + timeout: 20\n}'],
+  [getFixturePath('before.json'), getFixturePath('after.json')],
+  [getFixturePath('before.yml'), getFixturePath('after.yml')],
+  [getFixturePath('before.ini'), getFixturePath('after.ini')],
 ])(
-  '.genDiff(%s, %s)',
-  (a, b, expected) => {
-    expect(genDiff(a, b)).toBe(expected);
+  'genDiff(%s, %s)',
+  (a, b) => {
+    expect(genDiff(a, b)).toBe(result);
+  },
+);
+
+test.each([
+  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
+  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
+  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+])(
+  'genDiff(%s, %s, tree)',
+  (a, b) => {
+    expect(genDiff(a, b)).toBe(resultTree);
+  },
+);
+
+test.each([
+  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
+  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
+  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+])(
+  'genDiff(%s, %s, plain)',
+  (a, b) => {
+    expect(genDiff(a, b, 'plain')).toBe(resultPlain);
+  },
+);
+
+test.each([
+  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
+  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
+  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+])(
+  'genDiff(%s, %s, json)',
+  (a, b) => {
+    expect(genDiff(a, b, 'json')).toBe(resultJson);
   },
 );
