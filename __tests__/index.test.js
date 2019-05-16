@@ -4,10 +4,17 @@ import genDiff from '../src';
 
 const getFixturePath = fileName => path.join(__dirname, '__fixtures__', fileName);
 
-const result = fs.readFileSync(getFixturePath('result'), 'utf8').trim();
-const resultTree = fs.readFileSync(getFixturePath('resultTree'), 'utf8').trim();
-const resultPlain = fs.readFileSync(getFixturePath('resultPlain'), 'utf8').trimEnd();
-const resultJson = fs.readFileSync(getFixturePath('resultJson'), 'utf8').trim();
+let result;
+let resultTree;
+let resultPlain;
+let resultJson;
+
+beforeAll(() => {
+  result = fs.readFileSync(getFixturePath('result'), 'utf8').trim();
+  resultTree = fs.readFileSync(getFixturePath('resultTree'), 'utf8').trim();
+  resultPlain = fs.readFileSync(getFixturePath('resultPlain'), 'utf8').trimEnd();
+  resultJson = fs.readFileSync(getFixturePath('resultJson'), 'utf8').trim();
+});
 
 test.each([
   [getFixturePath('before.json'), getFixturePath('after.json')],

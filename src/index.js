@@ -32,10 +32,10 @@ const getAst = (obj1, obj2) => {
       added: nodesAdded,
       unchanged: nodesUnchanged,
       changed: nodesChanged,
-      childrens: {},
+      children: {},
     };
   }
-  const children = keysOfObjects.reduce(
+  const nodesChildren = keysOfObjects.reduce(
     (acc, n) => ({ ...acc, [n]: getAst(obj1[n], obj2[n]) }
     ), {},
   );
@@ -44,7 +44,7 @@ const getAst = (obj1, obj2) => {
     added: nodesAdded,
     unchanged: nodesUnchanged,
     changed: nodesChanged,
-    childrens: children,
+    children: nodesChildren,
   };
 };
 
