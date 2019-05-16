@@ -1,13 +1,13 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-export default (data, extname) => {
-  if (extname === '.json') {
-    return JSON.parse(data);
+export default (content) => {
+  if (content.key === '.json') {
+    return JSON.parse(content.value);
   }
-  if (extname === '.yml') {
-    return yaml.safeLoad(data);
-  } // else if (extname === '.ini') {
-  return ini.parse(data);
+  if (content.key === '.yml') {
+    return yaml.safeLoad(content.value);
+  } // else if (content.key === '.ini') {
+  return ini.parse(content.value);
 //  }
 };

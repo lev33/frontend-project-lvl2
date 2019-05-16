@@ -1,16 +1,18 @@
 import fs from 'fs';
 import path from 'path';
+import _ from 'lodash';
 import parse from './parsers';
-import renderTree from './formatters/renderTree';
-import renderPlain from './formatters/renderPlain';
+import render from './formatters';
 
 const getAst = (obj1, obj2) => {
   const keysObj1 = Object.keys(obj1);
   const keysObj2 = Object.keys(obj2);
 
-  const keysRemoved = keysObj1.filter(n => !keysObj2.includes(n));
-  const keysAdded = keysObj2.filter(n => !keysObj1.includes(n));
-  const keysDoubled = keysObj1.filter(n => keysObj2.includes(n));
+  const union = _.union(keysObj1, keysObj2);
+
+  const keysRemoved = union.filter(n => !keysObj2.includes(n));
+  const keysAdded = union.filter(n => !keysObj1.includes(n));
+  const keysDoubled = union.filter(n => keysObj1.includes(n) && keysObj2.includes(n));
 
   const f = (a, b) => (a instanceof Object) && (b instanceof Object);
 
@@ -49,17 +51,11 @@ const getAst = (obj1, obj2) => {
 };
 
 export default (pathToFile1, pathToFile2, format = '') => {
-  const content1 = fs.readFileSync(pathToFile1, 'utf8');
-  const content2 = fs.readFileSync(pathToFile2, 'utf8');
-  const extname = path.extname(pathToFile1);
-  const obj1 = parse(content1, extname);
-  const obj2 = parse(content2, extname);
+  const content1 = { key: path.extname(pathToFile1), value: fs.readFileSync(pathToFile1, 'utf8') };
+  const content2 = { key: path.extname(pathToFile2), value: fs.readFileSync(pathToFile2, 'utf8') };
+  const obj1 = parse(content1);
+  const obj2 = parse(content2);
   const ast = getAst(obj1, obj2);
-  if (format === 'plain') {
-    return renderPlain(ast);
-  }
-  if (format === 'json') {
-    return JSON.stringify(ast);
-  }
-  return `{${renderTree(ast)}\n}`;
+
+  return render(ast, format);
 };
