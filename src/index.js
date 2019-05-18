@@ -9,7 +9,6 @@ const getAst = (obj1, obj2) => {
   const keysObj2 = Object.keys(obj2);
 
   const union = _.union(keysObj1, keysObj2);
-  const f = (a, b) => (a instanceof Object) && (b instanceof Object);
 
   const ast = union.map((key) => {
     if (_.has(obj1, key) && !_.has(obj2, key)) {
@@ -19,13 +18,14 @@ const getAst = (obj1, obj2) => {
       return { node: 'added', [key]: obj2[key] };
     }
     if (_.has(obj1, key) && _.has(obj2, key)) {
-      if (!f(obj1[key], obj2[key]) && (obj1[key] === obj2[key])) {
+      const valuesIsObjects = obj1[key] instanceof Object && obj2[key] instanceof Object;
+      if (!valuesIsObjects && (obj1[key] === obj2[key])) {
         return { node: 'unchanged', [key]: obj1[key] };
       }
-      if (!f(obj1[key], obj2[key]) && (obj1[key] !== obj2[key])) {
+      if (!valuesIsObjects && (obj1[key] !== obj2[key])) {
         return { node: 'changed', [key]: { old: obj1[key], new: obj2[key] } };
       }
-      if (f(obj1[key], obj2[key])) {
+      if (valuesIsObjects) {
         return { node: 'children', [key]: getAst(obj1[key], obj2[key]) };
       }
     }
