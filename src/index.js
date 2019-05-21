@@ -35,10 +35,14 @@ const getAst = (obj1, obj2) => {
 };
 
 export default (pathToFile1, pathToFile2, format = '') => {
-  const content1 = { key: path.extname(pathToFile1), value: fs.readFileSync(pathToFile1, 'utf8') };
-  const content2 = { key: path.extname(pathToFile2), value: fs.readFileSync(pathToFile2, 'utf8') };
-  const obj1 = parse(content1);
-  const obj2 = parse(content2);
+  const content1 = fs.readFileSync(pathToFile1, 'utf8');
+  const content2 = fs.readFileSync(pathToFile2, 'utf8');
+  const format1 = path.extname(pathToFile1);
+  const format2 = path.extname(pathToFile2);
+
+  const obj1 = parse(content1, format1);
+  const obj2 = parse(content2, format2);
+
   const ast = getAst(obj1, obj2);
 
   return render(ast, format);

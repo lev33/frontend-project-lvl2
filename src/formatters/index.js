@@ -2,11 +2,12 @@ import renderTree from './renderTree';
 import renderPlain from './renderPlain';
 
 export default (ast, format) => {
-  if (format === 'plain') {
-    return renderPlain(ast);
+  switch (format) {
+    case 'plain':
+      return renderPlain(ast);
+    case 'json':
+      return JSON.stringify(ast);
+    default:
+      return renderTree(ast);
   }
-  if (format === 'json') {
-    return JSON.stringify(ast);
-  }
-  return renderTree(ast);
 };
