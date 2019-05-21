@@ -8,5 +8,5 @@ export default (ast, format) => {
   if (format === 'json') {
     return JSON.stringify(ast);
   }
-  return `{${renderTree(ast)}\n}`;
+  return renderTree(ast);
 };

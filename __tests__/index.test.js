@@ -7,13 +7,13 @@ const getFixturePath = fileName => path.join(__dirname, '__fixtures__', fileName
 let result;
 let resultTree;
 let resultPlain;
-let resultJson;
+// let resultJson;
 
 beforeAll(() => {
   result = fs.readFileSync(getFixturePath('result'), 'utf8').trim();
   resultTree = fs.readFileSync(getFixturePath('resultTree'), 'utf8').trim();
   resultPlain = fs.readFileSync(getFixturePath('resultPlain'), 'utf8').trimEnd();
-  resultJson = fs.readFileSync(getFixturePath('resultJson'), 'utf8').trim();
+//  resultJson = fs.readFileSync(getFixturePath('resultJson'), 'utf-8').trim();
 });
 
 test.each([
@@ -49,13 +49,13 @@ test.each([
   },
 );
 
-test.each([
-  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
-  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
-  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
-])(
-  'genDiff(%s, %s, json)',
-  (a, b) => {
-    expect(genDiff(a, b, 'json')).toBe(resultJson);
-  },
-);
+// test.each([
+//  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
+//  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
+//  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+// ])(
+//  'genDiff(%s, %s, json)',
+//  (a, b) => {
+//    expect(genDiff(a, b, 'json')).toBe(resultJson);
+//  },
+// );

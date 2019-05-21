@@ -7,27 +7,27 @@ const renderPlain = (tree, prefix = '') => {
   };
 
   const result = tree.map((item) => {
-    const [, key] = Object.keys(item);
-    const [status, value] = Object.values(item);
-    if (status === 'removed') {
-      return `\nProperty '${prefix}${key}' was removed`;
+    const [key] = Object.keys(item);
+    const [value] = Object.values(item);
+    if (value.type === 'removed') {
+      return `Property '${prefix}${key}' was removed`;
     }
-    if (status === 'added') {
-      return `\nProperty '${prefix}${key}' was added with value: ${stringify(value)}`;
+    if (value.type === 'added') {
+      return `Property '${prefix}${key}' was added with value: ${stringify(value.value)}`;
     }
-    if (status === 'unchanged') {
-      return `\nProperty '${prefix}${key}' was unchanged with value: ${stringify(value)}`;
+    if (value.type === 'unchanged') {
+      return `Property '${prefix}${key}' was unchanged with value: ${stringify(value.value)}`;
     }
-    if (status === 'changed') {
-      return `\nProperty '${prefix}${key}' was updated. From ${stringify(value.old)} to ${stringify(value.new)}`;
+    if (value.type === 'changed') {
+      return `Property '${prefix}${key}' was updated. From ${stringify(value.old)} to ${stringify(value.new)}`;
     }
-    if (status === 'children') {
-      return `${renderPlain(value, (prefix === '') ? `${key}.` : `${prefix}${key}.`)}`;
+    if (value.type === 'children') {
+      return `${renderPlain(value.value, (prefix === '') ? `${key}.` : `${prefix}${key}.`)}`;
     }
     return 'error';
   });
 
-  return result.join('');
+  return result.join('\n');
 };
 
 export default renderPlain;

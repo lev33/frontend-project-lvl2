@@ -12,21 +12,21 @@ const getAst = (obj1, obj2) => {
 
   const ast = union.map((key) => {
     if (_.has(obj1, key) && !_.has(obj2, key)) {
-      return { node: 'removed', [key]: obj1[key] };
+      return { [key]: { value: obj1[key], type: 'removed' } };
     }
     if (!_.has(obj1, key) && _.has(obj2, key)) {
-      return { node: 'added', [key]: obj2[key] };
+      return { [key]: { value: obj2[key], type: 'added' } };
     }
     if (_.has(obj1, key) && _.has(obj2, key)) {
-      const valuesIsObjects = obj1[key] instanceof Object && obj2[key] instanceof Object;
-      if (!valuesIsObjects && (obj1[key] === obj2[key])) {
-        return { node: 'unchanged', [key]: obj1[key] };
+      const valuesAreObjects = obj1[key] instanceof Object && obj2[key] instanceof Object;
+      if (!valuesAreObjects && (obj1[key] === obj2[key])) {
+        return { [key]: { value: obj1[key], type: 'unchanged' } };
       }
-      if (!valuesIsObjects && (obj1[key] !== obj2[key])) {
-        return { node: 'changed', [key]: { old: obj1[key], new: obj2[key] } };
+      if (!valuesAreObjects && (obj1[key] !== obj2[key])) {
+        return { [key]: { old: obj1[key], new: obj2[key], type: 'changed' } };
       }
-      if (valuesIsObjects) {
-        return { node: 'children', [key]: getAst(obj1[key], obj2[key]) };
+      if (valuesAreObjects) {
+        return { [key]: { value: getAst(obj1[key], obj2[key]), type: 'children' } };
       }
     }
     return 'error';

@@ -1,4 +1,3 @@
-
 Property 'common.setting1' was unchanged with value: Value 1
 Property 'common.setting2' was removed
 Property 'common.setting3' was updated. From true to [complex value]
