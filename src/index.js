@@ -40,8 +40,8 @@ export default (pathToFile1, pathToFile2, format = '') => {
   const format1 = path.extname(pathToFile1);
   const format2 = path.extname(pathToFile2);
 
-  const obj1 = parse(content1, format1);
-  const obj2 = parse(content2, format2);
+  const obj1 = parse(format1)(content1);
+  const obj2 = parse(format2)(content2);
 
   const ast = getAst(obj1, obj2);
 
