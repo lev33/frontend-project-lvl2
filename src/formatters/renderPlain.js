@@ -7,20 +7,20 @@ const renderPlain = (tree, prefix = '') => {
   };
 
   const result = tree.map((item) => {
-    const [key] = Object.keys(item);
-    const [value] = Object.values(item);
+    const [type] = Object.keys(item);
+    const [node] = Object.values(item);
 
-    switch (value.type) {
+    switch (type) {
       case 'removed':
-        return `Property '${prefix}${key}' was removed`;
+        return `Property '${prefix}${node.key}' was removed`;
       case 'added':
-        return `Property '${prefix}${key}' was added with value: ${stringify(value.value)}`;
+        return `Property '${prefix}${node.key}' was added with value: ${stringify(node.value)}`;
       case 'unchanged':
-        return `Property '${prefix}${key}' was unchanged with value: ${stringify(value.value)}`;
+        return `Property '${prefix}${node.key}' was unchanged with value: ${stringify(node.value)}`;
       case 'changed':
-        return `Property '${prefix}${key}' was updated. From ${stringify(value.old)} to ${stringify(value.new)}`;
+        return `Property '${prefix}${node.key}' was updated. From ${stringify(node.oldValue)} to ${stringify(node.newValue)}`;
       case 'children':
-        return `${renderPlain(value.value, (prefix === '') ? `${key}.` : `${prefix}${key}.`)}`;
+        return `${renderPlain(node.value, (prefix === '') ? `${node.key}.` : `${prefix}${node.key}.`)}`;
       default:
         return 'Error: missing selector';
     }

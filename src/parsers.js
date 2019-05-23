@@ -1,6 +1,6 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const renders = { '.json': JSON.parse, '.yml': yaml.safeLoad, '.ini': ini.parse };
+const parsers = { '.json': JSON.parse, '.yml': yaml.safeLoad, '.ini': ini.parse };
 
-export default format => renders[format];
+export default format => parsers[format];

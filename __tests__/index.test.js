@@ -17,45 +17,45 @@ beforeAll(() => {
 });
 
 test.each([
-  [getFixturePath('before.json'), getFixturePath('after.json')],
-  [getFixturePath('before.yml'), getFixturePath('after.yml')],
-  [getFixturePath('before.ini'), getFixturePath('after.ini')],
+  ['before.json', 'after.json'],
+  ['before.yml', 'after.yml'],
+  ['before.ini', 'after.ini'],
 ])(
   'genDiff(%s, %s)',
   (a, b) => {
-    expect(genDiff(a, b)).toBe(result);
+    expect(genDiff(getFixturePath(a), getFixturePath(b))).toBe(result);
   },
 );
 
 test.each([
-  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
-  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
-  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+  ['beforeTree.json', 'afterTree.json'],
+  ['beforeTree.yml', 'afterTree.yml'],
+  ['beforeTree.ini', 'afterTree.ini'],
 ])(
   'genDiff(%s, %s, tree)',
   (a, b) => {
-    expect(genDiff(a, b)).toBe(resultTree);
+    expect(genDiff(getFixturePath(a), getFixturePath(b))).toBe(resultTree);
   },
 );
 
 test.each([
-  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
-  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
-  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+  ['beforeTree.json', 'afterTree.json'],
+  ['beforeTree.yml', 'afterTree.yml'],
+  ['beforeTree.ini', 'afterTree.ini'],
 ])(
   'genDiff(%s, %s, plain)',
   (a, b) => {
-    expect(genDiff(a, b, 'plain')).toBe(resultPlain);
+    expect(genDiff(getFixturePath(a), getFixturePath(b), 'plain')).toBe(resultPlain);
   },
 );
 
 test.each([
-  [getFixturePath('beforeTree.json'), getFixturePath('afterTree.json')],
-  [getFixturePath('beforeTree.yml'), getFixturePath('afterTree.yml')],
-  [getFixturePath('beforeTree.ini'), getFixturePath('afterTree.ini')],
+  ['beforeTree.json', 'afterTree.json'],
+  ['beforeTree.yml', 'afterTree.yml'],
+  ['beforeTree.ini', 'afterTree.ini'],
 ])(
   'genDiff(%s, %s, json)',
   (a, b) => {
-    expect(genDiff(a, b, 'json')).toBe(resultJson);
+    expect(genDiff(getFixturePath(a), getFixturePath(b), 'json')).toBe(resultJson);
   },
 );
