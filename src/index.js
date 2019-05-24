@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import getParser from './parsers';
+import getParse from './parsers';
 import render from './formatters';
 
 const getAst = (obj1, obj2) => {
@@ -37,11 +37,11 @@ const getAst = (obj1, obj2) => {
 export default (pathToFile1, pathToFile2, format = '') => {
   const content1 = fs.readFileSync(pathToFile1, 'utf8');
   const content2 = fs.readFileSync(pathToFile2, 'utf8');
-  const parser1 = getParser(path.extname(pathToFile1));
-  const parser2 = getParser(path.extname(pathToFile2));
+  const parse1 = getParse(path.extname(pathToFile1));
+  const parse2 = getParse(path.extname(pathToFile2));
 
-  const obj1 = parser1(content1);
-  const obj2 = parser2(content2);
+  const obj1 = parse1(content1);
+  const obj2 = parse2(content2);
 
   const ast = getAst(obj1, obj2);
 
