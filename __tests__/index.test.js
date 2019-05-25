@@ -4,6 +4,8 @@ import genDiff from '../src';
 
 const getFixturePath = fileName => path.join(__dirname, '__fixtures__', fileName);
 
+const formats = ['.json', '.yml', '.ini'];
+
 let result;
 let resultTree;
 let resultPlain;
@@ -12,50 +14,34 @@ let resultJson;
 beforeAll(() => {
   result = fs.readFileSync(getFixturePath('result'), 'utf8').trim();
   resultTree = fs.readFileSync(getFixturePath('resultTree'), 'utf8').trim();
-  resultPlain = fs.readFileSync(getFixturePath('resultPlain'), 'utf8').trimEnd();
+  resultPlain = fs.readFileSync(getFixturePath('resultPlain'), 'utf8').trim();
   resultJson = fs.readFileSync(getFixturePath('resultJson'), 'utf-8').trim();
 });
 
-test.each([
-  ['before.json', 'after.json'],
-  ['before.yml', 'after.yml'],
-  ['before.ini', 'after.ini'],
-])(
-  'genDiff(%s, %s)',
-  (a, b) => {
-    expect(genDiff(getFixturePath(a), getFixturePath(b))).toBe(result);
+test.each(formats)(
+  'genDiff(%s)',
+  (format) => {
+    expect(genDiff(getFixturePath('before'.concat(format)), getFixturePath('after'.concat(format)))).toBe(result);
   },
 );
 
-test.each([
-  ['beforeTree.json', 'afterTree.json'],
-  ['beforeTree.yml', 'afterTree.yml'],
-  ['beforeTree.ini', 'afterTree.ini'],
-])(
-  'genDiff(%s, %s, tree)',
-  (a, b) => {
-    expect(genDiff(getFixturePath(a), getFixturePath(b))).toBe(resultTree);
+test.each(formats)(
+  'genDiff(%s, tree)',
+  (format) => {
+    expect(genDiff(getFixturePath('beforeTree'.concat(format)), getFixturePath('afterTree'.concat(format)))).toBe(resultTree);
   },
 );
 
-test.each([
-  ['beforeTree.json', 'afterTree.json'],
-  ['beforeTree.yml', 'afterTree.yml'],
-  ['beforeTree.ini', 'afterTree.ini'],
-])(
-  'genDiff(%s, %s, plain)',
-  (a, b) => {
-    expect(genDiff(getFixturePath(a), getFixturePath(b), 'plain')).toBe(resultPlain);
+test.each(formats)(
+  'genDiff(%s, plain)',
+  (format) => {
+    expect(genDiff(getFixturePath('beforeTree'.concat(format)), getFixturePath('afterTree'.concat(format)), 'plain')).toBe(resultPlain);
   },
 );
 
-test.each([
-  ['beforeTree.json', 'afterTree.json'],
-  ['beforeTree.yml', 'afterTree.yml'],
-  ['beforeTree.ini', 'afterTree.ini'],
-])(
-  'genDiff(%s, %s, json)',
-  (a, b) => {
-    expect(genDiff(getFixturePath(a), getFixturePath(b), 'json')).toBe(resultJson);
+test.each(formats)(
+  'genDiff(%s, json)',
+  (format) => {
+    expect(genDiff(getFixturePath('beforeTree'.concat(format)), getFixturePath('afterTree'.concat(format)), 'json')).toBe(resultJson);
   },
 );
