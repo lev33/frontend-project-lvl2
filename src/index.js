@@ -12,21 +12,23 @@ const getAst = (obj1, obj2) => {
 
   const ast = union.map((key) => {
     if (_.has(obj1, key) && !_.has(obj2, key)) {
-      return { removed: { key: [key], value: obj1[key] } };
+      return { type: 'removed', key, value: obj1[key] };
     }
     if (!_.has(obj1, key) && _.has(obj2, key)) {
-      return { added: { key: [key], value: obj2[key] } };
+      return { type: 'added', key, value: obj2[key] };
     }
     if (_.has(obj1, key) && _.has(obj2, key)) {
       const valuesAreObjects = obj1[key] instanceof Object && obj2[key] instanceof Object;
       if (!valuesAreObjects && (obj1[key] === obj2[key])) {
-        return { unchanged: { key: [key], value: obj1[key] } };
+        return { type: 'unchanged', key, value: obj1[key] };
       }
       if (!valuesAreObjects && (obj1[key] !== obj2[key])) {
-        return { changed: { key: [key], oldValue: obj1[key], newValue: obj2[key] } };
+        return {
+          type: 'changed', key, oldValue: obj1[key], newValue: obj2[key],
+        };
       }
       if (valuesAreObjects) {
-        return { children: { key: [key], value: getAst(obj1[key], obj2[key]) } };
+        return { type: 'children', key, value: getAst(obj1[key], obj2[key]) };
       }
     }
     return 'error';

@@ -12,20 +12,17 @@ const render = (tree, tab = 1) => {
 
 
   const result = tree.map((item) => {
-    const [type] = Object.keys(item);
-    const [node] = Object.values(item);
-
-    switch (type) {
+    switch (item.type) {
       case 'removed':
-        return `${space(tab)}- ${node.key}: ${stringify(node.value, tab)}`;
+        return `${space(tab)}- ${item.key}: ${stringify(item.value, tab)}`;
       case 'added':
-        return `${space(tab)}+ ${node.key}: ${stringify(node.value, tab)}`;
+        return `${space(tab)}+ ${item.key}: ${stringify(item.value, tab)}`;
       case 'unchanged':
-        return `${space(tab)}  ${node.key}: ${stringify(node.value, tab)}`;
+        return `${space(tab)}  ${item.key}: ${stringify(item.value, tab)}`;
       case 'changed':
-        return `${space(tab)}- ${node.key}: ${stringify(node.oldValue, tab)}\n${space(tab)}+ ${node.key}: ${stringify(node.newValue, tab)}`;
+        return `${space(tab)}- ${item.key}: ${stringify(item.oldValue, tab)}\n${space(tab)}+ ${item.key}: ${stringify(item.newValue, tab)}`;
       case 'children':
-        return `${space(tab)}  ${node.key}: {\n${render(node.value, tab + 2)}\n${space(tab)}}`;
+        return `${space(tab)}  ${item.key}: {\n${render(item.value, tab + 2)}\n${space(tab)}}`;
       default:
         return 'Error: missing selector';
     }
