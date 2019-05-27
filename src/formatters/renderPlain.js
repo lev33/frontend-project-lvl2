@@ -19,7 +19,7 @@ const renderPlain = (tree, prefix = '') => {
       case 'children':
         return `${renderPlain(item.children, (prefix === '') ? `${item.key}.` : `${prefix}${item.key}.`)}`;
       default:
-        throw new Error('missing selector');
+        throw new Error('renderPlain missing selector');
     }
   });
 

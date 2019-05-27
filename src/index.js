@@ -31,7 +31,7 @@ const getAst = (obj1, obj2) => {
         return { type: 'children', key, children: getAst(obj1[key], obj2[key]) };
       }
     }
-    return 'error';
+    throw new Error('getAst error');
   });
   return ast;
 };

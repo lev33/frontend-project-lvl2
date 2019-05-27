@@ -29,7 +29,7 @@ const render = (tree, tab = 1) => {
       case 'children':
         return `${space(tab)}  ${item.key}: {\n${render(item.children, tab + 2)}\n${space(tab)}}`;
       default:
-        throw new Error('missing selector');
+        throw new Error('renderTree missing selector');
     }
   });
 
