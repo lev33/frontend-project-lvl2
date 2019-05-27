@@ -17,9 +17,9 @@ const renderPlain = (tree, prefix = '') => {
       case 'changed':
         return `Property '${prefix}${item.key}' was updated. From ${stringify(item.oldValue)} to ${stringify(item.newValue)}`;
       case 'children':
-        return `${renderPlain(item.value, (prefix === '') ? `${item.key}.` : `${prefix}${item.key}.`)}`;
+        return `${renderPlain(item.children, (prefix === '') ? `${item.key}.` : `${prefix}${item.key}.`)}`;
       default:
-        return 'Error: missing selector';
+        throw new Error('missing selector');
     }
   });
 

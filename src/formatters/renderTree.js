@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const render = (tree, tab = 1) => {
   const space = tabs => ' '.repeat(tabs * 2);
 
@@ -20,15 +22,18 @@ const render = (tree, tab = 1) => {
       case 'unchanged':
         return `${space(tab)}  ${item.key}: ${stringify(item.value, tab)}`;
       case 'changed':
-        return `${space(tab)}- ${item.key}: ${stringify(item.oldValue, tab)}\n${space(tab)}+ ${item.key}: ${stringify(item.newValue, tab)}`;
+        return [
+          `${space(tab)}- ${item.key}: ${stringify(item.oldValue, tab)}`,
+          `${space(tab)}+ ${item.key}: ${stringify(item.newValue, tab)}`,
+        ];
       case 'children':
-        return `${space(tab)}  ${item.key}: {\n${render(item.value, tab + 2)}\n${space(tab)}}`;
+        return `${space(tab)}  ${item.key}: {\n${render(item.children, tab + 2)}\n${space(tab)}}`;
       default:
-        return 'Error: missing selector';
+        throw new Error('missing selector');
     }
   });
 
-  return result.join('\n');
+  return _.flatten(result).join('\n');
 };
 
 const renderTree = tree => `{\n${render(tree)}\n}`;

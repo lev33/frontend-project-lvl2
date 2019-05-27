@@ -28,7 +28,7 @@ const getAst = (obj1, obj2) => {
         };
       }
       if (valuesAreObjects) {
-        return { type: 'children', key, value: getAst(obj1[key], obj2[key]) };
+        return { type: 'children', key, children: getAst(obj1[key], obj2[key]) };
       }
     }
     return 'error';
